@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta de Alumnos</title>
+  </head>
+  <body>
+    <h1>Consulta de Alumnos</h1>
+    <button id="consulta">Consultar Alumnos</button>
+    <button id="saludar" onclick="saludar()">Saludar Curso!</button>
+    <div class="contenedor"></div>
+
+    <script>
+      const consultabtn = document.getElementById("consulta");
+      const contenedor = document.querySelector(".contenedor");
+
+      function saludar() {
+        alert("¡Hola Curso!");
+      }
+
+      consultabtn.addEventListener("click", async () => {
+        try {
+          const response = await fetch("http://192.168.43.15:4444/TraerDatos");
+          const data = await response.json();
+
+          if (!data.error) {
+            contenedor.innerHTML = "";
+            data.forEach((alumno) => {
+              contenedor.innerHTML += `<p>Nombre: ${alumno.nombre}, Edad: ${alumno.edad}</p>`;
+            });
+          } else {
+            contenedor.innerHTML = `<p>Error: ${data.error}</p>`;
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          contenedor.innerHTML = "<p>Error al realizar la consulta</p>";
+        }
+      });
+    </script>
+  </body>
+</html>
